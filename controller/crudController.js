@@ -1,3 +1,5 @@
+const { ObjectId } = require("mongodb");
+
 const getAllStudent = async (req, res) => {
   const db = req.db;
   const cursor = db.collection("students").find();
@@ -28,8 +30,25 @@ const deleteStudent = async (req, res) => {
   }
 };
 
+const updateStudent = async (req, res) => {
+  const db = req.db;
+  const { id, name, age } = req.body;
+  console.log(new ObjectId(id));
+  try {
+    db.collection("students").updateOne(
+      { _id: new ObjectId(id) },
+      { $set: { name: name, age: age } }
+    );
+
+    res.status(200).json({ message: "Student successfully updated!!" });
+  } catch (error) {
+    res.status(400).json({ message: error });
+  }
+};
+
 module.exports = {
   getAllStudent,
   insertStudent,
   deleteStudent,
+  updateStudent,
 };
