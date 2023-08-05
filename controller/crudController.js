@@ -16,7 +16,20 @@ const insertStudent = async (req, res) => {
   }
 };
 
+const deleteStudent = async (req, res) => {
+  const db = req.db;
+  const { name, grade } = req.body;
+
+  try {
+    db.collection("students").deleteOne({ name, grade });
+    res.status(200).json({ message: "Successfully Deleted" });
+  } catch (err) {
+    res.status(400).json({ message: "Deletion failed!!" });
+  }
+};
+
 module.exports = {
   getAllStudent,
   insertStudent,
+  deleteStudent,
 };
